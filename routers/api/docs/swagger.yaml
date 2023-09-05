@@ -1,0 +1,1739 @@
+basePath: /
+definitions:
+  Rsp:
+    properties:
+      code:
+        allOf:
+        - $ref: '#/definitions/proto.CodeType'
+        description: msg code
+      message:
+        description: msg info
+        type: string
+      requestId:
+        description: trans id
+        type: string
+      results:
+        description: response body
+    type: object
+  async.AsyncTask:
+    properties:
+      processed:
+        type: integer
+      taskId:
+        type: string
+      taskStatus:
+        type: string
+      total:
+        type: integer
+    type: object
+  httputil.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  proto.CodeType:
+    enum:
+    - 200
+    - 201
+    - 1001
+    - 1002
+    - 1003
+    - 1004
+    - 1005
+    - 1006
+    - 1007
+    - 1008
+    - 1009
+    - 1010
+    - 1011
+    - 1012
+    - 1013
+    - 1014
+    - 1015
+    - 1016
+    - 1017
+    - 1018
+    - 1021
+    - 1022
+    - 1027
+    - 1028
+    - 1029
+    - 1030
+    - 1031
+    - 1032
+    - 1036
+    - 1037
+    - 1038
+    - 1046
+    - 1050
+    - 1061
+    - 1062
+    type: integer
+    x-enum-comments:
+      CodeCopyIdError: 文件夹不能拷贝到自己
+      CodeFailedToConnect: 建立连接失败
+      CodeFailedToConnectDB: 连接DB失败
+      CodeFailedToCreateBucket: 失败去创建桶
+      CodeFailedToCreateFolder: 失败去创建文件夹
+      CodeFailedToCreateMultipartTask: 失败去创建任务
+      CodeFailedToCreateSymlink: 失败去创建符号链接
+      CodeFailedToDeleteUser: 删除用户失败
+      CodeFailedToGetUsedStorage: 获取用户空间使用量失败
+      CodeFailedToInitUser: 失败去初始化用户
+      CodeFailedToOpenFile: 打开文件失败
+      CodeFailedToOperateDB: 失败去操作数据库
+      CodeFailedToOptMinio: 失败去写文件
+      CodeFailedToSaveFile: 失败去保存数据
+      CodeFileExist: 文件已存在
+      CodeFileNotExist: 文件不存在
+      CodeFolderDepthTooLong: 文件夹层数超过5层
+      CodeFolderExist: 文件夹已存在
+      CodeFolderNotExist: 文件夹不存在
+      CodeGetAsyncTaskInfoFailed: 获取异步任务状态失败
+      CodeMultipartRangeUploaded: 分片范围已上传
+      CodeMultipartTaskCompleteErr: 合并错误
+      CodeMultipartTaskHashErr: 文件hash校验错误
+      CodeMultipartTaskNotFound: 未找到任务
+      CodeMultipartTaskOverlap: 任务重叠
+      CodeMultipartTaskRangeErr: 上传范围错误
+      CodeMultipartUploadingConflit: 分片范围上传冲突
+      CodeNotEnoughSpace: 空间不够，不上传
+      CodeParamErr: 参数错误
+      CodeReqParamErr: 请求参数错误(推荐)
+      CodeUserIdError: 用户Id的错误
+      CodeWriteRedisFailed: 写入redis 失败
+      CodeZipFileFailed: 压缩文件失败
+    x-enum-varnames:
+    - CodeOk
+    - CodeCreateAsyncTaskSuccess
+    - CodeParamErr
+    - CodeReqParamErr
+    - CodeFileNotExist
+    - CodeFailedToOpenFile
+    - CodeFolderNotExist
+    - CodeFailedToConnect
+    - CodeFailedToConnectDB
+    - CodeFailedToOptMinio
+    - CodeFailedToCreateBucket
+    - CodeFailedToSaveFile
+    - CodeFailedToOperateDB
+    - CodeFailedToCreateFolder
+    - CodeFileExist
+    - CodeFolderExist
+    - CodeFolderDepthTooLong
+    - CodeUserIdError
+    - CodeFailedToInitUser
+    - CodeFailedToDeleteUser
+    - CodeFailedToGetUsedStorage
+    - CodeCopyIdError
+    - CodeFailedToCreateMultipartTask
+    - CodeMultipartTaskNotFound
+    - CodeMultipartTaskOverlap
+    - CodeMultipartTaskRangeErr
+    - CodeMultipartTaskHashErr
+    - CodeMultipartTaskCompleteErr
+    - CodeNotEnoughSpace
+    - CodeMultipartRangeUploaded
+    - CodeMultipartUploadingConflit
+    - CodeWriteRedisFailed
+    - CodeZipFileFailed
+    - CodeFailedToCreateSymlink
+    - CodeGetAsyncTaskInfoFailed
+  proto.CompleteMultipartTaskReq:
+    properties:
+      uploadId:
+        type: string
+    required:
+    - uploadId
+    type: object
+  proto.CompleteMultipartTaskRsp:
+    properties:
+      betag:
+        type: string
+      bucketName:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      executable:
+        type: boolean
+      ext:
+        items:
+          type: integer
+        type: array
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      tags:
+        type: string
+      transactionId:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      userId:
+        type: integer
+      uuid:
+        type: string
+      version:
+        type: integer
+    type: object
+  proto.CopyFileReq:
+    properties:
+      dstPath:
+        description: dest path
+        type: string
+      uuids:
+        description: uuids
+        items:
+          type: string
+        type: array
+        uniqueItems: true
+    type: object
+  proto.CopyRsp:
+    properties:
+      affectRows:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/proto.NewAndOldUuid'
+        type: array
+    type: object
+  proto.CreateFolderReq:
+    properties:
+      currentDirUuid:
+        description: current folder's uuid
+        type: string
+      folderName:
+        description: folder name
+        type: string
+    type: object
+  proto.CreateMultipartTaskConflictRsp:
+    properties:
+      albumId:
+        type: integer
+      betag:
+        maxLength: 34
+        minLength: 32
+        type: string
+      businessId:
+        type: integer
+      createTime:
+        type: integer
+      fileName:
+        type: string
+      folderId:
+        type: string
+      folderPath:
+        type: string
+      mime:
+        type: string
+      modifyTime:
+        type: integer
+      size:
+        type: integer
+      uploadId:
+        type: string
+      uploadedParts:
+        items:
+          $ref: '#/definitions/proto.Part'
+        type: array
+      uploadingParts:
+        items:
+          $ref: '#/definitions/proto.Part'
+        type: array
+    required:
+    - betag
+    - fileName
+    - size
+    type: object
+  proto.CreateMultipartTaskReq:
+    properties:
+      albumId:
+        type: integer
+      betag:
+        maxLength: 34
+        minLength: 32
+        type: string
+      businessId:
+        type: integer
+      createTime:
+        type: integer
+      fileName:
+        type: string
+      folderId:
+        type: string
+      folderPath:
+        type: string
+      mime:
+        type: string
+      modifyTime:
+        type: integer
+      size:
+        type: integer
+    required:
+    - betag
+    - fileName
+    - size
+    type: object
+  proto.CreateMultipartTaskRsp:
+    properties:
+      completeInfo:
+        allOf:
+        - $ref: '#/definitions/proto.FileInfo'
+        description: task completed
+      conflictInfo:
+        allOf:
+        - $ref: '#/definitions/proto.CreateMultipartTaskConflictRsp'
+        description: task exists
+      rspType:
+        description: rsp type
+        type: integer
+      succInfo:
+        allOf:
+        - $ref: '#/definitions/proto.CreateMultipartTaskSuccRsp'
+        description: task info
+    type: object
+  proto.CreateMultipartTaskSuccRsp:
+    properties:
+      partSize:
+        type: integer
+      uploadId:
+        type: string
+    type: object
+  proto.DbAffect:
+    properties:
+      affectRows:
+        type: integer
+    type: object
+  proto.DeleteFileReq:
+    properties:
+      uuids:
+        description: uuids
+        items:
+          type: string
+        type: array
+        uniqueItems: true
+    type: object
+  proto.DeleteMultipartTaskReq:
+    properties:
+      uploadId:
+        type: string
+    required:
+    - uploadId
+    type: object
+  proto.ErrMess:
+    properties:
+      code:
+        $ref: '#/definitions/proto.CodeType'
+      message:
+        type: string
+    type: object
+  proto.FileInfo:
+    properties:
+      betag:
+        type: string
+      bucketName:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      executable:
+        type: boolean
+      ext:
+        items:
+          type: integer
+        type: array
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      tags:
+        type: string
+      transactionId:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      userId:
+        type: integer
+      uuid:
+        type: string
+      version:
+        type: integer
+    type: object
+  proto.FileInfoForInnerRsp:
+    properties:
+      betag:
+        type: string
+      bucketName:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      duration:
+        type: integer
+      executable:
+        type: boolean
+      ext:
+        items:
+          type: integer
+        type: array
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      relativePath:
+        type: string
+      size:
+        type: integer
+      tags:
+        type: string
+      transactionId:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      userId:
+        type: integer
+      uuid:
+        type: string
+      version:
+        type: integer
+    type: object
+  proto.FileInfoForTrends:
+    properties:
+      betag:
+        type: string
+      bucketName:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      duration:
+        type: integer
+      executable:
+        type: boolean
+      ext:
+        items:
+          type: integer
+        type: array
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      tags:
+        type: string
+      transactionId:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      userId:
+        type: integer
+      uuid:
+        type: string
+      version:
+        type: integer
+    type: object
+  proto.FileInfoForTrendsReq:
+    properties:
+      uuids:
+        description: uuids
+        items:
+          type: string
+        type: array
+    type: object
+  proto.FileInfoForTrendsRsp:
+    properties:
+      fileInfos:
+        items:
+          $ref: '#/definitions/proto.FileInfoForTrends'
+        type: array
+    type: object
+  proto.FileInfoPub:
+    properties:
+      betag:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      uuid:
+        type: string
+    type: object
+  proto.FileInfoRsp:
+    properties:
+      betag:
+        type: string
+      category:
+        type: string
+      createdAt:
+        type: integer
+      fileCount:
+        type: integer
+      isDir:
+        type: boolean
+      mime:
+        type: string
+      modifyAt:
+        type: integer
+      name:
+        type: string
+      operationAt:
+        type: integer
+      parentUuid:
+        type: string
+      path:
+        type: string
+      size:
+        type: integer
+      trashed:
+        description: 0-normal; 1-Logical delete, put into the recycle bin; 2-Has been
+          cleared from the recycle bin and is to be physically deleted
+        type: integer
+      uuid:
+        type: string
+    type: object
+  proto.FolderInfo:
+    properties:
+      name:
+        type: string
+      operationAt:
+        type: integer
+      path:
+        type: string
+      size:
+        type: integer
+    type: object
+  proto.GetListRspData:
+    properties:
+      fileList:
+        items:
+          $ref: '#/definitions/proto.FileInfoPub'
+        type: array
+      pageInfo:
+        $ref: '#/definitions/proto.PageInfoExt'
+    type: object
+  proto.ListMultipartReq:
+    properties:
+      uploadId:
+        type: string
+    required:
+    - uploadId
+    type: object
+  proto.ListMultipartRsp:
+    properties:
+      uploadedParts:
+        items:
+          $ref: '#/definitions/proto.Part'
+        type: array
+      uploadingParts:
+        items:
+          $ref: '#/definitions/proto.Part'
+        type: array
+    type: object
+  proto.ModifyFileReq:
+    properties:
+      fileName:
+        description: new name
+        type: string
+      uuid:
+        description: file/folder uuid
+        type: string
+    type: object
+  proto.MoveFileReq:
+    properties:
+      destPath:
+        description: dest path
+        type: string
+      uuids:
+        description: uuid
+        items:
+          type: string
+        type: array
+        uniqueItems: true
+    required:
+    - uuids
+    type: object
+  proto.NewAndOldUuid:
+    properties:
+      newId:
+        type: string
+      oldId:
+        type: string
+    type: object
+  proto.PageInfoExt:
+    properties:
+      count:
+        type: integer
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+  proto.Part:
+    properties:
+      end:
+        type: integer
+      start:
+        minimum: 0
+        type: integer
+    required:
+    - end
+    type: object
+  proto.RecycledPhyDeleteReq:
+    properties:
+      uuids:
+        items:
+          type: string
+        type: array
+    type: object
+  proto.RestoreRecycledReq:
+    properties:
+      uuids:
+        items:
+          type: string
+        type: array
+    required:
+    - uuids
+    type: object
+  proto.StatusRsp:
+    properties:
+      status:
+        type: string
+    type: object
+  proto.Storage:
+    properties:
+      userStorage:
+        type: integer
+    type: object
+  proto.User:
+    properties:
+      userId:
+        type: integer
+    type: object
+  proto.VodSymlinkReq:
+    properties:
+      uuid:
+        description: file's uuid
+        type: string
+    type: object
+  proto.VodSymlinkRsp:
+    properties:
+      linkName:
+        type: string
+    type: object
+info:
+  contact:
+    email: service@ao.space
+    name: AO.space
+    url: https://ao.space/
+  description: This is AO.space aofs OpenAPI reference document.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: aofs apis
+  version: "1.0"
+paths:
+  /space/v1/api/async/task:
+    get:
+      consumes:
+      - application/json
+      description: Query the status of an asynchronous task
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: task id
+        in: query
+        name: taskId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/async.AsyncTask'
+              type: object
+      tags:
+      - Async
+  /space/v1/api/file/compressed:
+    get:
+      description: Get compressed graph
+      parameters:
+      - description: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: file content
+          schema:
+            type: file
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+      summary: Get compressed graph
+      tags:
+      - File
+  /space/v1/api/file/copy:
+    post:
+      consumes:
+      - application/json
+      description: Batch copy files
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: copyFilesReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.CopyFileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.CopyRsp'
+              type: object
+      summary: Batch copy files
+      tags:
+      - File
+  /space/v1/api/file/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete files/folders to Recycle bin
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: DeleteId
+        required: true
+        schema:
+          $ref: '#/definitions/proto.DeleteFileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/async.AsyncTask'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Delete files/folders to Recycle bin
+      tags:
+      - File
+  /space/v1/api/file/download:
+    get:
+      description: File download
+      parameters:
+      - description: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: range, such as：bytes=200-1000
+        in: header
+        name: Range
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: file content
+          schema:
+            type: file
+        "206":
+          description: Partial Content
+          schema:
+            type: file
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+        "416":
+          description: Range Not Satisfiable
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+      summary: File download
+      tags:
+      - File
+  /space/v1/api/file/info:
+    get:
+      consumes:
+      - application/json
+      description: Query file info
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: file/folder uuid
+        in: query
+        name: uuid
+        type: string
+      - description: path
+        in: query
+        name: path
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: file info
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.FileInfoRsp'
+              type: object
+      summary: Query file info
+      tags:
+      - File
+  /space/v1/api/file/list:
+    get:
+      consumes:
+      - application/json
+      description: Get file list
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: folder uuid
+        in: query
+        name: uuid
+        type: string
+      - description: Whether to filter folders
+        in: query
+        name: isDir
+        type: boolean
+      - description: page，default:1
+        in: query
+        name: page
+        type: integer
+      - description: page size，default:10
+        in: query
+        name: pageSize
+        type: integer
+      - description: Sort. The default is reverse order
+        in: query
+        name: orderBy
+        type: string
+      - description: 'file classification, field value: document，video，picture or
+          other; If there is no field, all are included'
+        in: query
+        name: category
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.GetListRspData'
+              type: object
+      summary: Get file list
+      tags:
+      - File
+  /space/v1/api/file/move:
+    post:
+      consumes:
+      - application/json
+      description: Move file/folder
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: moveFilesReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.MoveFileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.DbAffect'
+              type: object
+      summary: Move file/folder
+      tags:
+      - File
+  /space/v1/api/file/rename:
+    post:
+      consumes:
+      - application/json
+      description: Modify file/folder name
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request info
+        in: body
+        name: ModifyFileReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.ModifyFileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.DbAffect'
+              type: object
+      summary: Modify file/folder name
+      tags:
+      - File
+  /space/v1/api/file/search:
+    get:
+      consumes:
+      - application/json
+      description: Search files
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: 'folder''s uuid，default: /'
+        in: query
+        name: uuid
+        type: string
+      - description: filename
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: file type
+        in: query
+        name: category
+        type: string
+      - description: page, default:1
+        in: query
+        name: page
+        type: integer
+      - description: page size，default:10
+        in: query
+        name: pageSize
+        type: integer
+      - description: sort type, default value is in reverse order of change time
+        in: query
+        name: orderBy
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.GetListRspData'
+              type: object
+      summary: Search files
+      tags:
+      - File
+  /space/v1/api/file/thumb:
+    get:
+      description: Get thumbnail
+      parameters:
+      - description: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      responses:
+        "200":
+          description: file content
+          schema:
+            type: file
+        "400":
+          description: param error
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/proto.ErrMess'
+      summary: Get thumbnail
+      tags:
+      - File
+  /space/v1/api/file/vod/symlink:
+    post:
+      consumes:
+      - application/json
+      description: Create symbolic link
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: parmas
+        in: body
+        name: VodSymlinkReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.VodSymlinkReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.VodSymlinkRsp'
+              type: object
+      summary: Create symbolic link
+      tags:
+      - File
+  /space/v1/api/folder/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Folder
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: createFolderReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.CreateFolderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.FileInfo'
+              type: object
+      summary: Create Folder
+      tags:
+      - Folder
+  /space/v1/api/folder/info:
+    get:
+      consumes:
+      - application/json
+      description: Get folder details
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: folder's uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.FolderInfo'
+              type: object
+      summary: Get folder details
+      tags:
+      - Folder
+  /space/v1/api/inner/file/info:
+    get:
+      consumes:
+      - application/json
+      description: Get file info for inner
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: uuid
+        in: query
+        name: uuid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.FileInfoForInnerRsp'
+              type: object
+      summary: Get file info for inner
+      tags:
+      - File
+  /space/v1/api/inner/file/infos:
+    post:
+      consumes:
+      - application/json
+      description: Get fileinfo list for inner
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: uuids
+        in: body
+        name: FileInfoForTrendsReq
+        schema:
+          $ref: '#/definitions/proto.FileInfoForTrendsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.FileInfoForTrendsRsp'
+              type: object
+      summary: Get fileinfo list for inner
+      tags:
+      - File
+  /space/v1/api/multipart/complete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request id
+        in: query
+        name: requestId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/proto.CompleteMultipartTaskReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.CompleteMultipartTaskRsp'
+              type: object
+      summary: Complte multipart task
+      tags:
+      - Multipart
+  /space/v1/api/multipart/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request id
+        in: query
+        name: requestId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/proto.CreateMultipartTaskReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: task info
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.CreateMultipartTaskRsp'
+              type: object
+      summary: Creating a multipart task
+      tags:
+      - Multipart
+  /space/v1/api/multipart/delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request id
+        in: query
+        name: requestId
+        required: true
+        type: string
+      - description: params
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/proto.DeleteMultipartTaskReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+      summary: Delete multipart task
+      tags:
+      - Multipart
+  /space/v1/api/multipart/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request id
+        in: query
+        name: requestId
+        required: true
+        type: string
+      - description: param
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/proto.ListMultipartReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.ListMultipartRsp'
+              type: object
+      summary: Query multipart task info
+      tags:
+      - Multipart
+  /space/v1/api/multipart/upload:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: request id
+        in: query
+        name: requestId
+        required: true
+        type: string
+      - in: query
+        name: end
+        required: true
+        type: integer
+      - in: query
+        name: md5sum
+        required: true
+        type: string
+      - in: query
+        minimum: 0
+        name: start
+        type: integer
+      - in: query
+        name: uploadId
+        required: true
+        type: string
+      - description: part content
+        in: body
+        name: object
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+      summary: Upload multipart data
+      tags:
+      - Multipart
+  /space/v1/api/recycled/clear:
+    post:
+      consumes:
+      - application/json
+      description: Clean out the recycle bin
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: params
+        in: body
+        name: uuids
+        required: true
+        schema:
+          $ref: '#/definitions/proto.RecycledPhyDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+      summary: Clean out the recycle bin
+      tags:
+      - Recycled
+  /space/v1/api/recycled/list:
+    get:
+      consumes:
+      - application/json
+      description: Query the recycle bin file list
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: 'page index，default: 1'
+        in: query
+        name: page
+        type: integer
+      - description: 'page size，default: 10'
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.GetListRspData'
+              type: object
+      summary: Query the recycle bin file list
+      tags:
+      - Recycled
+  /space/v1/api/recycled/restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore files from recycle bin
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: params
+        in: body
+        name: restoreFilesReq
+        required: true
+        schema:
+          $ref: '#/definitions/proto.RestoreRecycledReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/Rsp'
+        "201":
+          description: asynchronous task
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/async.AsyncTask'
+              type: object
+      summary: Restore files from recycle bin
+      tags:
+      - Recycled
+  /space/v1/api/status:
+    get:
+      consumes:
+      - application/json
+      description: Querying service status
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.StatusRsp'
+              type: object
+      summary: Querying service status
+      tags:
+      - ServerStatus
+  /space/v1/api/sync/synced:
+    get:
+      consumes:
+      - application/json
+      description: Obtain incremental synchronization data
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: timestamp
+        in: query
+        name: timestamp
+        required: true
+        type: integer
+      - description: path
+        in: query
+        name: path
+        type: string
+      - description: device id
+        in: query
+        name: deviceId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.GetListRspData'
+              type: object
+      summary: Obtain incremental synchronization data
+      tags:
+      - Sync
+  /space/v1/api/user/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: user id
+        in: body
+        name: userId
+        required: true
+        schema:
+          $ref: '#/definitions/proto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+      summary: Delete user
+      tags:
+      - User
+  /space/v1/api/user/init:
+    post:
+      consumes:
+      - application/json
+      description: Initialize user
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: user id
+        in: body
+        name: userId
+        required: true
+        schema:
+          $ref: '#/definitions/proto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Rsp'
+      summary: Initialize user
+      tags:
+      - User
+  /space/v1/api/user/storage:
+    get:
+      consumes:
+      - application/json
+      description: Query the user space capacity
+      parameters:
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: user id
+        in: query
+        name: targetUserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Rsp'
+            - properties:
+                results:
+                  $ref: '#/definitions/proto.Storage'
+              type: object
+      summary: Query the user space capacity
+      tags:
+      - User
+swagger: "2.0"

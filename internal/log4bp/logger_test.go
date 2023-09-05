@@ -1,0 +1,46 @@
+// Copyright (c) 2022 Institute of Software, Chinese Academy of Sciences (ISCAS)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package log4bp
+
+import (
+	"testing"
+)
+
+type Req struct {
+	X string `json:"x" default:"xxx"`
+	Y int    `json:"y" default:"123"`
+}
+
+func TestLog(t *testing.T) {
+
+	loger := New("tid123", "debug")
+	req := Req{}
+	loger.Debug().Interface("req", &req).Msg("test")
+	//loger.LogI("req")
+
+}
+func TestLog2(t *testing.T) {
+
+	loger := New("", "debug")
+	req := Req{}
+	loger.Debug().Interface("req", &req).Msg("test")
+	//loger.LogI("test2", req, 1)
+
+}
+
+func TestLog3(t *testing.T) {
+	loger := New("", "debug")
+	loger.LogE().Timestamp().Msg("error message")
+}
