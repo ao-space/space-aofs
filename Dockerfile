@@ -12,16 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.18-alpine3.14 as builder
+FROM alpine:edge as builder
 
 WORKDIR /opt/
 
 COPY . .
-RUN go env -w CGO_ENABLED=0 && go env -w GO111MODULE=on && go build -o space-aofs
 
-FROM alpine:3.14
+RUN apk add wget \
+        && cd / && arch=$(uname -m) \
+        && case "$arch" in x86_64) arch="amd64"; ;; \
+        aarch64) arch="arm64"; ;; \
+        riscv64) arch="riscv64"; ;; \
+        *) arch="Unknown"; ;; esac \
+        && wget https://go.dev/dl/go1.21.1.linux-$arch.tar.gz \
+        && tar -xzvf go1.21.1.linux-$arch.tar.gz \
+        && export PATH=$PATH:/go/bin && cd /opt/ \
+        && go env -w CGO_ENABLED=0 \
+        && go env -w GO111MODULE=on \
+        && go build -o space-aofs
 
-RUN apk --no-cache add ntfs-3g lsblk exfat-utils fuse-exfat usbutils mediainfo eudev
+FROM alpine:edge
+
+RUN apk --no-cache add wget ntfs-3g \
+        lsblk exfat-utils fuse-exfat usbutils mediainfo eudev
 COPY --from=builder /opt/space-aofs /usr/bin
 COPY --from=builder /opt/template/ /tmp/
 RUN chmod +x /usr/bin/space-aofs
